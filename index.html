@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stef MecaPneu | Garage à Martigues</title>
   <meta name="description" content="Garage Stef MecaPneu à Martigues : pneus neufs et occasions, diagnostic, géométrie 3D, révision et entretien. Avec ou sans rendez-vous.">
+  <meta name="theme-color" content="#0b0c10">
+  <meta property="og:title" content="Stef MecaPneu | Garage à Martigues">
+  <meta property="og:description" content="Pneus, géométrie 3D, diagnostics et entretien complet. Ouvert du lundi au samedi avec ou sans rendez-vous.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.stefmecapneu.fr/">
+  <meta property="og:image" content="https://www.stefmecapneu.fr/assets/og-image.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -31,8 +37,19 @@
       top: 0;
       z-index: 10;
       backdrop-filter: blur(10px);
-      background: rgba(11,12,16,0.75);
+      background: rgba(11,12,16,0.85);
       border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 8px 24px;
+      font-size: 14px;
+      color: #e5e7eb;
+      background: linear-gradient(90deg, rgba(255,138,0,0.12), rgba(0,145,255,0.08));
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
     nav {
       max-width: 1200px;
@@ -88,7 +105,7 @@
     .btn-secondary:hover { background: rgba(255,255,255,0.08); }
     .hero {
       color: #fff;
-      padding: 80px 24px 50px;
+      padding: 88px 24px 56px;
       position: relative;
       overflow: hidden;
     }
@@ -152,7 +169,7 @@
       margin-right: 8px;
       margin-bottom: 8px;
     }
-    section { padding: 60px 24px; background: var(--light); }
+    section { padding: 70px 24px; background: var(--light); }
     section.dark { background: #0f172a; color: #e5e7eb; }
     .section-inner { max-width: 1200px; margin: 0 auto; }
     .section-header { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
@@ -211,6 +228,15 @@
       gap: 12px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.35);
     }
+    .why { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 22px; }
+    .why-card { background: #fff; padding: 18px; border-radius: 12px; border: 1px solid #e5e7eb; display: grid; gap: 6px; box-shadow: 0 10px 30px rgba(15,23,42,0.05); }
+    .why-card strong { color: var(--text); }
+    .faq { margin-top: 24px; display: grid; gap: 12px; }
+    .faq-item { background: #0b0c10; color: #e5e7eb; padding: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); }
+    .faq-item summary { font-weight: 700; cursor: pointer; }
+    .faq-item p { color: #cbd5e1; margin: 8px 0 0; }
+    .floating-cta { position: fixed; right: 16px; bottom: 16px; display: flex; flex-direction: column; gap: 10px; z-index: 11; }
+    .floating-cta a { box-shadow: 0 12px 30px rgba(0,0,0,0.22); }
     footer { background: #0b0c10; color: #9ca3af; padding: 24px; text-align: center; border-top: 1px solid rgba(255,255,255,0.06); }
     @media (max-width: 768px) {
       nav { padding: 12px 18px; }
@@ -219,11 +245,16 @@
       .cta-row { width: 100%; }
       .btn-secondary { width: 100%; justify-content: center; }
       .btn-primary { width: 100%; }
+      .floating-cta { left: 16px; right: 16px; bottom: 14px; flex-direction: row; justify-content: space-between; }
     }
   </style>
 </head>
 <body>
   <header>
+    <div class="topbar">
+      <span>Ouvert du lundi au samedi · 09h30 - 18h00</span>
+      <span>Avec ou sans rendez-vous</span>
+    </div>
     <nav>
       <div class="logo">STEF <span>MECA</span>PNEU</div>
       <div class="nav-links">
@@ -341,6 +372,36 @@
     </div>
   </section>
 
+  <section class="dark" id="why">
+    <div class="section-inner">
+      <div class="section-header">
+        <div>
+          <p class="badge" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12);">Pourquoi choisir Stef MecaPneu</p>
+          <h2>Des engagements clairs pour votre voiture</h2>
+          <p style="color:#cbd5e1;">Transparence sur les devis, pièces adaptées à votre véhicule et conseils personnalisés.</p>
+        </div>
+      </div>
+      <div class="why">
+        <div class="why-card">
+          <strong>Devis rapides et détaillés</strong>
+          <span>Explication simple des interventions avant chaque réparation.</span>
+        </div>
+        <div class="why-card">
+          <strong>Pièces garanties</strong>
+          <span>Sélection de pneus et pièces conformes aux recommandations constructeur.</span>
+        </div>
+        <div class="why-card">
+          <strong>Accueil sans rendez-vous</strong>
+          <span>Urgence crevaison ou contrôle pression ? Passez quand vous voulez.</span>
+        </div>
+        <div class="why-card">
+          <strong>Suivi personnalisé</strong>
+          <span>Historique d'entretien conservé pour planifier vos prochaines révisions.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="dark" id="avis">
     <div class="section-inner">
       <div class="section-header">
@@ -395,7 +456,7 @@
           </div>
         </div>
         <div class="map-wrapper">
-          <iframe title="Localisation Stef MecaPneu" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11565.519635075847!2d5.0497!3d43.4205!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12c9fdb8d85cba6f%3A0x9723c449bef1fb09!2sRN%20568%20-%20Croix%20Saint%2C%2013500%20Martigues!5e0!3m2!1sfr!2sfr!4v1700000000000!5m2!1sfr!2sfr" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <iframe title="Localisation Stef MecaPneu" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1441.607812228958!2d5.0565114!3d43.4044174!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12c9fdd8736ae935%3A0x971fb19cd26d8e29!2sStef%20MecaPneu!5e0!3m2!1sfr!2sfr!4v1700000000000!5m2!1sfr!2sfr" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
       </div>
     </div>
@@ -434,6 +495,7 @@
             </label>
             <button class="btn-primary" id="submit">Envoyer ma demande</button>
             <div id="form-feedback" style="display:none; color:#22c55e; font-weight:700;">Merci ! Nous vous rappelons très vite.</div>
+            <div id="form-error" style="display:none; color:#f97316; font-weight:700;">Merci de renseigner au moins votre nom et votre téléphone.</div>
           </div>
         </div>
         <div>
@@ -451,10 +513,41 @@
     </div>
   </section>
 
+  <section class="dark" aria-labelledby="faq-title">
+    <div class="section-inner">
+      <div class="section-header">
+        <div>
+          <p class="badge" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12);">Questions fréquentes</p>
+          <h2 id="faq-title">Vos questions, nos réponses</h2>
+          <p style="color:#cbd5e1;">Les informations essentielles avant de passer à l'atelier.</p>
+        </div>
+      </div>
+      <div class="faq">
+        <details class="faq-item" open>
+          <summary>Puis-je venir sans rendez-vous ?</summary>
+          <p>Oui, le garage accueille sans rendez-vous pour les urgences pneus, crevaisons et contrôles pression. Pour une révision complète, un appel avant votre venue permet de préparer les pièces.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Quels moyens de paiement sont acceptés ?</summary>
+          <p>Cartes bancaires, espèces et virement pour les professionnels. Le détail figure sur le devis transmis avant intervention.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Combien de temps pour une géométrie 3D ?</summary>
+          <p>Comptez environ 45 minutes à 1 heure selon le véhicule et l'état des trains roulants. Nous vérifions aussi l'usure des pneus et la pression avant restitution.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
   <footer>
     <div>Stef MecaPneu - RN 568 - Croix Saint, 13500 Martigues</div>
     <div>© <span id="year"></span> Tous droits réservés</div>
   </footer>
+
+  <div class="floating-cta" aria-label="Contact rapide">
+    <a class="btn-primary" href="tel:0649781134">📞 Appeler</a>
+    <a class="btn-secondary" href="#contact">📅 Demander un créneau</a>
+  </div>
 
   <script>
     // Smooth scroll for anchor links
@@ -471,7 +564,16 @@
     // Simple fake form submission feedback
     const submitBtn = document.getElementById('submit');
     const feedback = document.getElementById('form-feedback');
+    const error = document.getElementById('form-error');
     submitBtn.addEventListener('click', () => {
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      if (!name || !phone) {
+        feedback.style.display = 'none';
+        error.style.display = 'block';
+        return;
+      }
+      error.style.display = 'none';
       submitBtn.textContent = 'Envoi en cours...';
       submitBtn.disabled = true;
       setTimeout(() => {
