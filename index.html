@@ -17,31 +17,79 @@
   <style>
     :root {
       --orange: #ff8a00;
+      --orange-glow: rgba(255, 138, 0, 0.4);
       --blue: #00a3ff;
-      --dark: #040507;
-      --dark-2: #0b0f16;
-      --light: #0f172a;
+      --blue-glow: rgba(0, 163, 255, 0.4);
+      --dark: #0a0a0a;
+      --dark-2: #111111;
+      --light: #141414;
       --text: #e5ecf5;
       --muted: #9fb3c8;
     }
     * { box-sizing: border-box; }
+    
+    /* Animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(2deg); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.08; transform: translate(-50%, -50%) scale(1); }
+      50% { opacity: 0.12; transform: translate(-50%, -50%) scale(1.05); }
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    /* Scroll animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
       color: var(--text);
-      background: radial-gradient(circle at 15% 20%, rgba(255,138,0,0.08), transparent 25%),
-                  radial-gradient(circle at 85% 10%, rgba(0,163,255,0.08), transparent 25%),
-                  linear-gradient(135deg, #05070b 0%, #0b0f16 45%, #05070b 100%);
+      background: radial-gradient(circle at 15% 20%, rgba(255,138,0,0.06), transparent 25%),
+                  radial-gradient(circle at 85% 10%, rgba(0,163,255,0.06), transparent 25%),
+                  linear-gradient(135deg, #0a0a0a 0%, #111111 45%, #0a0a0a 100%);
       background-attachment: fixed;
+      overflow-x: hidden;
     }
-    a { color: inherit; text-decoration: none; }
+    a { color: inherit; text-decoration: none; transition: color 0.3s ease; }
     header {
       position: sticky;
       top: 0;
       z-index: 10;
-      backdrop-filter: blur(10px);
-      background: rgba(4,5,7,0.92);
+      backdrop-filter: blur(12px) saturate(180%);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
+      background: rgba(10,10,10,0.85);
       border-bottom: 1px solid rgba(255,255,255,0.05);
+      animation: fadeIn 0.6s ease-out;
     }
     .topbar {
       display: flex;
@@ -52,6 +100,8 @@
       font-size: 14px;
       color: #e5e7eb;
       background: linear-gradient(90deg, rgba(255,138,0,0.25), rgba(0,163,255,0.18));
+      background-size: 200% 100%;
+      animation: gradientFlow 8s ease infinite;
       border-bottom: 1px solid rgba(255,255,255,0.06);
     }
     nav {
@@ -70,7 +120,9 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      transition: transform 0.3s ease;
     }
+    .logo:hover { transform: scale(1.02); }
     .logo span {
       color: var(--orange);
     }
@@ -79,6 +131,21 @@
       gap: 18px;
       font-weight: 500;
     }
+    .nav-links a {
+      position: relative;
+      padding: 4px 0;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--orange), var(--blue));
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover::after { width: 100%; }
     .btn-primary {
       display: inline-flex;
       align-items: center;
@@ -91,10 +158,23 @@
       font-weight: 700;
       border: none;
       cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
       box-shadow: 0 10px 30px rgba(255,138,0,0.25);
+      position: relative;
+      overflow: hidden;
     }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(255,138,0,0.35); }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s ease;
+    }
+    .btn-primary:hover::before { left: 100%; }
+    .btn-primary:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 40px rgba(255,138,0,0.4); }
     .btn-secondary {
       padding: 12px 20px;
       border-radius: 10px;
@@ -103,167 +183,415 @@
       background: rgba(255,255,255,0.04);
       font-weight: 600;
       cursor: pointer;
-      transition: 0.2s ease;
-    }
-    .btn-secondary:hover { background: rgba(255,255,255,0.08); }
-    .hero {
-      color: #fff;
-      padding: 88px 24px 56px;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
       position: relative;
       overflow: hidden;
+    }
+    .btn-secondary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,138,0,0.1), rgba(0,163,255,0.1));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .btn-secondary:hover::before { opacity: 1; }
+    .btn-secondary:hover { border-color: rgba(255,255,255,0.3); transform: translateY(-2px); }
+    .hero {
+      color: #fff;
+      padding: 100px 24px 70px;
+      position: relative;
+      overflow: hidden;
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
     }
     .hero::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 20% 20%, rgba(255,138,0,0.25), transparent 25%),
-                  radial-gradient(circle at 80% 20%, rgba(0,145,255,0.25), transparent 25%),
-                  radial-gradient(circle at 50% 60%, rgba(255,255,255,0.04), transparent 35%);
+      background: radial-gradient(circle at 20% 20%, rgba(255,138,0,0.2), transparent 30%),
+                  radial-gradient(circle at 80% 20%, rgba(0,145,255,0.2), transparent 30%),
+                  radial-gradient(circle at 50% 70%, rgba(255,255,255,0.03), transparent 40%);
       pointer-events: none;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px;
+      height: 700px;
+      background: url('assets/logo.jpg') center center no-repeat;
+      background-size: contain;
+      opacity: 0.08;
+      filter: grayscale(30%);
+      pointer-events: none;
+      z-index: 0;
+      animation: pulse 6s ease-in-out infinite;
     }
     .hero-grid {
       max-width: 1200px;
       margin: 0 auto;
+      width: 100%;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 28px;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 40px;
       position: relative;
       z-index: 1;
       align-items: center;
+    }
+    .hero-content {
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
     .badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 14px;
-      background: rgba(255,255,255,0.08);
+      padding: 10px 16px;
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(10px);
       border-radius: 999px;
       font-weight: 600;
+      font-size: 13px;
       color: #e5e7eb;
-      border: 1px solid rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.1);
       width: fit-content;
+      animation: fadeIn 0.6s ease-out 0.2s backwards;
     }
-    h1 { font-size: clamp(32px, 5vw, 48px); margin: 12px 0 8px; }
-    .subtitle { color: #d1d5db; line-height: 1.6; margin-bottom: 24px; }
-    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
-    .highlight-list { display: grid; gap: 10px; margin: 20px 0; }
-    .highlight-item { display: flex; align-items: center; gap: 10px; color: #e5e7eb; font-weight: 500; }
-    .highlight-icon { width: 34px; height: 34px; border-radius: 10px; background: rgba(255,255,255,0.08); display: grid; place-items: center; color: var(--orange); }
+    h1 { 
+      font-size: clamp(36px, 5vw, 56px); 
+      margin: 16px 0 12px; 
+      line-height: 1.1;
+      background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle { 
+      color: #9ca3af; 
+      line-height: 1.7; 
+      margin-bottom: 28px; 
+      font-size: 17px;
+      max-width: 500px;
+    }
+    .cta-row { 
+      display: flex; 
+      flex-wrap: wrap; 
+      gap: 14px; 
+      margin-bottom: 24px; 
+    }
+    .highlight-list { display: grid; gap: 12px; margin: 28px 0; }
+    .highlight-item { 
+      display: flex; 
+      align-items: center; 
+      gap: 12px; 
+      color: #d1d5db; 
+      font-weight: 500;
+      transition: transform 0.3s ease;
+    }
+    .highlight-item:hover { transform: translateX(5px); }
+    .highlight-icon { 
+      width: 38px; 
+      height: 38px; 
+      border-radius: 10px; 
+      background: linear-gradient(135deg, rgba(255,138,0,0.15), rgba(0,163,255,0.15)); 
+      display: grid; 
+      place-items: center; 
+      color: var(--orange);
+      font-size: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
     .hero-card {
-      background: linear-gradient(145deg, rgba(0,163,255,0.08), rgba(255,138,0,0.06));
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 18px;
-      padding: 22px;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+      background: linear-gradient(145deg, rgba(20,20,20,0.9), rgba(10,10,10,0.95));
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      padding: 28px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 25px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s backwards;
     }
-    .card-title { font-weight: 700; margin-bottom: 8px; color: #fff; }
-    .card-desc { color: #cbd5e1; font-size: 14px; line-height: 1.5; }
+    .card-title { 
+      font-weight: 700; 
+      font-size: 18px;
+      margin-bottom: 10px; 
+      color: #fff; 
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-title::before {
+      content: '';
+      width: 4px;
+      height: 20px;
+      background: linear-gradient(180deg, var(--orange), var(--blue));
+      border-radius: 2px;
+    }
+    .card-desc { color: #9ca3af; font-size: 14px; line-height: 1.6; }
     .pill {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 12px;
-      background: rgba(0,163,255,0.16);
+      padding: 8px 14px;
+      background: rgba(0,163,255,0.12);
       border-radius: 999px;
-      color: #e0f2fe;
+      color: #93c5fd;
       font-weight: 600;
       font-size: 13px;
       margin-right: 8px;
       margin-bottom: 8px;
+      border: 1px solid rgba(0,163,255,0.2);
+      transition: all 0.3s ease;
     }
-    section { padding: 70px 24px; background: var(--light); color: var(--text); }
+    .pill:hover {
+      background: rgba(0,163,255,0.2);
+      transform: translateY(-2px);
+    }
+    section { padding: 80px 24px; background: var(--light); color: var(--text); }
     section.dark { background: var(--dark-2); color: var(--text); }
     .section-inner { max-width: 1200px; margin: 0 auto; }
     .section-header { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
-    .section-header h2 { margin: 0; font-size: clamp(28px, 4vw, 36px); }
+    .section-header h2 { 
+      margin: 0; 
+      font-size: clamp(28px, 4vw, 40px);
+      background: linear-gradient(135deg, #fff 0%, #9ca3af 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
     .section-header p { margin: 8px 0 0; color: var(--muted); }
-    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; margin-top: 24px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 32px; }
     .service-card {
-      background: #0b111b;
-      padding: 18px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-      display: grid;
-      gap: 8px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .service-card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(0,0,0,0.35); }
-    .service-card .icon {
-      width: 44px; height: 44px; border-radius: 12px;
-      background: linear-gradient(135deg, rgba(255,138,0,0.2), rgba(0,163,255,0.2));
-      display: grid; place-items: center; color: #fff; font-weight: 700;
-    }
-    .service-card h3 { margin: 0; color: #f8fafc; }
-    .service-card p { margin: 0; color: var(--muted); font-size: 14px; }
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; align-items: center; margin-top: 30px; }
-    .info-box {
-      background: #0b0f16;
-      color: #fff;
-      padding: 20px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.12);
+      background: linear-gradient(145deg, rgba(20,20,20,0.8), rgba(15,15,15,0.9));
+      padding: 24px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
       display: grid;
       gap: 12px;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
     }
-    .info-row { display: flex; align-items: center; gap: 10px; }
-    .info-label { color: #9ca3af; font-size: 13px; }
-    .map-wrapper iframe { width: 100%; height: 320px; border: none; border-radius: 16px; box-shadow: 0 16px 40px rgba(15,23,42,0.12); }
-    .review-card {
-      background: #0b111b;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 14px;
-      padding: 18px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-      display: grid;
-      gap: 10px;
+    .service-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,138,0,0.08), rgba(0,163,255,0.08));
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
-    .stars { color: #f59e0b; }
-    .reviewer { font-weight: 700; color: var(--text); }
-    .cta-panel {
-      background: linear-gradient(135deg, #111827, #0b0c10);
+    .service-card:hover::before { opacity: 1; }
+    .service-card:hover { 
+      transform: translateY(-8px) scale(1.02); 
+      box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+      border-color: rgba(255,138,0,0.2);
+    }
+    .service-card .icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(255,138,0,0.2), rgba(0,163,255,0.2));
+      display: grid; place-items: center; color: #fff; font-size: 22px;
+      position: relative;
+      z-index: 1;
+      transition: transform 0.3s ease;
+    }
+    .service-card:hover .icon { transform: scale(1.1) rotate(5deg); }
+    .service-card h3 { margin: 0; color: #f8fafc; font-size: 17px; position: relative; z-index: 1; }
+    .service-card p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.6; position: relative; z-index: 1; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; align-items: center; margin-top: 30px; }
+    .info-box {
+      background: linear-gradient(145deg, rgba(15,15,20,0.95), rgba(10,10,15,0.98));
       color: #fff;
-      padding: 26px;
+      padding: 24px;
       border-radius: 18px;
       border: 1px solid rgba(255,255,255,0.08);
       display: grid;
-      gap: 12px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+      gap: 14px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
     }
-    .why { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 22px; }
-    .why-card { background: #0b111b; padding: 18px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); display: grid; gap: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
-    .why-card strong { color: #f8fafc; }
-    .faq { margin-top: 24px; display: grid; gap: 12px; }
-    .faq-item { background: #0b111b; color: #e5e7eb; padding: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); }
-    .faq-item summary { font-weight: 700; cursor: pointer; }
-    .faq-item p { color: #cbd5e1; margin: 8px 0 0; }
-    .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 22px; }
-    .photo-card { background: #0b111b; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.25); }
-    .photo-card img { width: 100%; height: 180px; object-fit: cover; display: block; }
-    .photo-card figcaption { padding: 12px; color: #e5e7eb; font-weight: 600; }
+    .info-box:hover { border-color: rgba(255,255,255,0.15); }
+    .info-row { display: flex; align-items: center; gap: 10px; }
+    .info-label { color: #6b7280; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .map-wrapper iframe { 
+      width: 100%; 
+      height: 320px; 
+      border: none; 
+      border-radius: 18px; 
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease;
+    }
+    .map-wrapper:hover iframe { transform: scale(1.02); }
+    .review-card {
+      background: linear-gradient(145deg, rgba(20,20,25,0.9), rgba(15,15,20,0.95));
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+      display: grid;
+      gap: 12px;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .review-card:hover { 
+      transform: translateY(-6px); 
+      border-color: rgba(255,138,0,0.2);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+    }
+    .stars { 
+      color: #fbbf24; 
+      font-size: 18px;
+      letter-spacing: 2px;
+    }
+    .reviewer { font-weight: 700; color: var(--text); font-size: 15px; }
+    .cta-panel {
+      background: linear-gradient(145deg, rgba(20,20,25,0.95), rgba(10,10,15,0.98));
+      color: #fff;
+      padding: 32px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.08);
+      display: grid;
+      gap: 16px;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--orange), var(--blue));
+    }
+    .why { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-top: 28px; }
+    .why-card { 
+      background: linear-gradient(145deg, rgba(20,20,25,0.9), rgba(15,15,20,0.95));
+      padding: 22px; 
+      border-radius: 16px; 
+      border: 1px solid rgba(255,255,255,0.06); 
+      display: grid; 
+      gap: 8px; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .why-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--orange), var(--blue));
+      transition: width 0.3s ease;
+    }
+    .why-card:hover::after { width: 100%; }
+    .why-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.12); }
+    .why-card strong { color: #f8fafc; font-size: 15px; }
+    .why-card span { color: var(--muted); font-size: 14px; line-height: 1.5; }
+    .faq { margin-top: 28px; display: grid; gap: 14px; }
+    .faq-item { 
+      background: linear-gradient(145deg, rgba(20,20,25,0.9), rgba(15,15,20,0.95));
+      color: #e5e7eb; 
+      padding: 20px; 
+      border-radius: 14px; 
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: all 0.3s ease;
+    }
+    .faq-item:hover { border-color: rgba(255,255,255,0.12); }
+    .faq-item[open] { border-color: rgba(255,138,0,0.3); }
+    .faq-item summary { 
+      font-weight: 700; 
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: color 0.3s ease;
+    }
+    .faq-item summary:hover { color: var(--orange); }
+    .faq-item summary::marker { color: var(--orange); }
+    .faq-item p { color: #9ca3af; margin: 12px 0 0; line-height: 1.6; }
+    .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 28px; }
+    .photo-card { 
+      background: linear-gradient(145deg, rgba(20,20,25,0.9), rgba(15,15,20,0.95));
+      border: 1px solid rgba(255,255,255,0.06); 
+      border-radius: 18px; 
+      overflow: hidden; 
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .photo-card:hover { 
+      transform: translateY(-8px) scale(1.02); 
+      box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+    }
+    .photo-card img { 
+      width: 100%; 
+      height: 200px; 
+      object-fit: cover; 
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .photo-card:hover img { transform: scale(1.1); }
+    .photo-card figcaption { 
+      padding: 16px; 
+      color: #e5e7eb; 
+      font-weight: 600;
+      background: rgba(0,0,0,0.3);
+    }
     .tip-card { background: #0b111b; border: 1px dashed rgba(255,255,255,0.2); border-radius: 12px; padding: 16px; color: #cbd5e1; display: grid; gap: 8px; }
     .tip-card strong { color: #f8fafc; }
-    .floating-cta { position: fixed; right: 16px; bottom: 16px; display: flex; flex-direction: column; gap: 10px; z-index: 11; }
-    .floating-cta a { box-shadow: 0 12px 30px rgba(0,0,0,0.22); }
-    footer { background: #040507; color: #9ca3af; padding: 24px; text-align: center; border-top: 1px solid rgba(255,255,255,0.06); }
+    .floating-cta { 
+      position: fixed; 
+      right: 20px; 
+      bottom: 20px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 12px; 
+      z-index: 11;
+      animation: fadeInUp 0.6s ease-out 1s backwards;
+    }
+    .floating-cta a { 
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .floating-cta a:hover { transform: scale(1.08); }
+    footer { 
+      background: #050505; 
+      color: #6b7280; 
+      padding: 40px 24px; 
+      text-align: center; 
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    footer div:first-child { font-weight: 600; color: #9ca3af; margin-bottom: 8px; }
     input, select, textarea {
-      background: #0b111b;
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 10px;
-      padding: 10px 12px;
+      background: rgba(15,15,20,0.9);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 14px 16px;
       color: #e5e7eb;
       font-family: inherit;
+      font-size: 15px;
+      transition: all 0.3s ease;
     }
-    input:focus, select:focus, textarea:focus { outline: 2px solid rgba(0,163,255,0.45); }
+    input:focus, select:focus, textarea:focus { 
+      outline: none;
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(255,138,0,0.15);
+    }
+    input::placeholder, textarea::placeholder { color: #4b5563; }
     @media (max-width: 768px) {
       nav { padding: 12px 18px; }
       .nav-links { display: none; }
-      .hero { padding-top: 60px; }
+      .hero { padding-top: 60px; min-height: auto; }
+      .hero-grid { grid-template-columns: 1fr; }
       .cta-row { width: 100%; }
       .btn-secondary { width: 100%; justify-content: center; }
       .btn-primary { width: 100%; }
       .floating-cta { left: 16px; right: 16px; bottom: 14px; flex-direction: row; justify-content: space-between; }
+      .floating-cta a { flex: 1; text-align: center; }
     }
   </style>
 </head>
@@ -274,7 +602,7 @@
       <span>Avec ou sans rendez-vous</span>
     </div>
     <nav>
-      <div class="logo">STEF <span>MECA</span>PNEU</div>
+      <div class="logo">STEF <span>MECAPNEU</span></div>
       <div class="nav-links">
         <a href="#services">Services</a>
         <a href="#avis">Avis</a>
@@ -287,59 +615,38 @@
 
   <section class="hero">
     <div class="hero-grid">
-      <div>
-        <div class="badge">Garage indépendant à Martigues</div>
-        <h1>Roulez serein avec Stef MecaPneu</h1>
-        <p class="subtitle">Pneus neufs et occasions, géométrie 3D, révision et entretien complet. Ouvert du lundi au samedi avec ou sans rendez-vous.</p>
+      <div class="hero-content">
+        <div class="badge">🔧 Garage indépendant à Martigues</div>
+        <h1>Roulez serein avec<br>Stef MecaPneu</h1>
+        <p class="subtitle">Spécialiste pneus et entretien automobile. Géométrie 3D, diagnostic complet et révisions. Service rapide avec ou sans rendez-vous.</p>
         <div class="cta-row">
-          <a class="btn-primary" href="tel:0649781134">📞 Appeler le garage</a>
-          <a class="btn-secondary" href="mailto:stefmecapneu@gmail.com">✉️ Demander un devis</a>
+          <a class="btn-primary" href="tel:0649781134">📞 Appeler maintenant</a>
+          <a class="btn-secondary" href="#contact">✉️ Demander un devis</a>
         </div>
         <div class="highlight-list">
-          <div class="highlight-item"><div class="highlight-icon">★</div>5★ sur Google – clients satisfaits</div>
-          <div class="highlight-item"><div class="highlight-icon">⚡</div>Intervention rapide avec ou sans rendez-vous</div>
-          <div class="highlight-item"><div class="highlight-icon">🛞</div>Spécialiste pneus, géométrie et entretien</div>
-        </div>
-        <div>
-          <span class="pill">📍 RN 568 - Croix Saint, 13500 Martigues</span>
-          <span class="pill">🕐 09h30 - 18h00</span>
-          <span class="pill">📆 Lundi - Samedi</span>
+          <div class="highlight-item"><div class="highlight-icon">★</div>Note 5★ sur Google</div>
+          <div class="highlight-item"><div class="highlight-icon">⚡</div>Sans rendez-vous accepté</div>
+          <div class="highlight-item"><div class="highlight-icon">🛞</div>Expert pneus & géométrie 3D</div>
         </div>
       </div>
       <div class="hero-card">
-        <div class="card-title">Services rapides et sur-mesure</div>
-        <div class="card-desc">Diagnostic, géométrie 3D, pneus toutes marques et révision complète pour rouler en toute sécurité.</div>
-        <div class="grid-2" style="margin-top: 12px; gap: 12px;">
-          <div class="info-box">
-            <div class="info-label">Téléphone</div>
-            <div class="info-row" style="justify-content: space-between;">
-              <div><strong>Fixe:</strong> 04 42 87 94 37</div>
-              <a class="btn-primary" style="padding:10px 14px; box-shadow:none;" href="tel:0442879437">Appeler</a>
-            </div>
-            <div class="info-row" style="justify-content: space-between;">
-              <div><strong>Mobile:</strong> 06 49 78 11 34</div>
-              <a class="btn-secondary" style="padding:10px 14px;" href="https://wa.me/33649781134">WhatsApp</a>
-            </div>
-            <div class="info-label">Email</div>
-            <a href="mailto:stefmecapneu@gmail.com" style="color:#e5e7eb; font-weight:600;">stefmecapneu@gmail.com</a>
+        <div class="card-title">Nous contacter</div>
+        <div class="card-desc">Ouvert du lundi au samedi, 09h30 - 18h00</div>
+        <div class="info-box" style="margin-top: 16px;">
+          <div class="info-label">Téléphone</div>
+          <div class="info-row" style="justify-content: space-between;">
+            <div><strong>04 42 87 94 37</strong></div>
+            <a class="btn-primary" style="padding:10px 16px; box-shadow:none; font-size: 13px;" href="tel:0442879437">Appeler</a>
           </div>
-          <div class="info-box" style="gap: 8px;">
-            <div class="info-row" style="justify-content: space-between;">
-              <div>
-                <div class="info-label">Ouverture</div>
-                <div style="font-weight:700; color:#fff;">Lun - Sam</div>
-              </div>
-              <div style="background: rgba(255,255,255,0.06); padding:8px 12px; border-radius: 10px;">09h30 - 18h00</div>
-            </div>
-            <div class="info-row" style="justify-content: space-between;">
-              <div class="info-label">Avec ou sans rendez-vous</div>
-              <div style="color:#22c55e; font-weight:700;">En toute flexibilité</div>
-            </div>
-            <div class="info-row" style="justify-content: space-between;">
-              <div class="info-label">Adresse</div>
-              <div style="text-align:right; font-weight:600; color:#fff;">RN 568 - Croix Saint<br>13500 Martigues</div>
-            </div>
+          <div class="info-row" style="justify-content: space-between;">
+            <div><strong>06 49 78 11 34</strong></div>
+            <a class="btn-secondary" style="padding:10px 16px; font-size: 13px;" href="https://wa.me/33649781134">WhatsApp</a>
           </div>
+          <div style="border-top: 1px solid rgba(255,255,255,0.08); margin: 8px 0; padding-top: 12px;">
+            <div class="info-label">Adresse</div>
+            <div style="font-weight:600; color:#fff; margin-top: 4px;">RN 568 - Croix Saint, 13500 Martigues</div>
+          </div>
+          <a href="mailto:stefmecapneu@gmail.com" style="color:#93c5fd; font-weight:500; font-size: 14px;">📧 stefmecapneu@gmail.com</a>
         </div>
       </div>
     </div>
@@ -347,44 +654,44 @@
 
   <section id="services">
     <div class="section-inner">
-      <div class="section-header">
+      <div class="section-header reveal">
         <div>
-          <p class="badge" style="color:#0b0c10; background: rgba(255,138,0,0.15); border-color: rgba(255,138,0,0.25);">Prestations principales</p>
-          <h2>Des services pensés pour votre sécurité</h2>
-          <p>Expertise pneus, entretien et diagnostics pour particuliers et professionnels.</p>
+          <p class="badge" style="color:#fff; background: rgba(255,138,0,0.15); border-color: rgba(255,138,0,0.25);">Nos prestations</p>
+          <h2>Tout pour votre véhicule</h2>
+          <p>Expertise complète : pneus, entretien et diagnostics pour rouler en sécurité.</p>
         </div>
         <a class="btn-secondary" href="tel:0649781134">Parler à un expert</a>
       </div>
       <div class="cards">
-        <div class="service-card">
+        <div class="service-card reveal reveal-delay-1">
           <div class="icon">🛞</div>
-          <h3>Pneus neufs et occasions</h3>
-          <p>Montage, équilibrage et conseil pour toutes marques. Options économiques ou premium.</p>
+          <h3>Pneus neufs & occasions</h3>
+          <p>Montage, équilibrage et conseil personnalisé. Toutes marques disponibles.</p>
         </div>
-        <div class="service-card">
-          <div class="icon">🧭</div>
-          <h3>Diagnostic & pré-contrôle</h3>
-          <p>Inspection complète avant contrôle technique pour éviter les mauvaises surprises.</p>
-        </div>
-        <div class="service-card">
+        <div class="service-card reveal reveal-delay-2">
           <div class="icon">📐</div>
-          <h3>Géométrie & parallélisme 3D</h3>
-          <p>Réglages haute précision pour préserver pneus et consommation.</p>
+          <h3>Géométrie 3D</h3>
+          <p>Parallélisme haute précision pour préserver vos pneus et optimiser la tenue de route.</p>
         </div>
-        <div class="service-card">
+        <div class="service-card reveal reveal-delay-3">
+          <div class="icon">🔍</div>
+          <h3>Diagnostic complet</h3>
+          <p>Pré-contrôle technique et identification des pannes avec équipement professionnel.</p>
+        </div>
+        <div class="service-card reveal reveal-delay-1">
           <div class="icon">🛠️</div>
           <h3>Révision & entretien</h3>
-          <p>Vidange, filtres, freins, climatisation et packs révision selon le carnet constructeur.</p>
+          <p>Vidange, freins, filtres, climatisation. Suivi carnet constructeur.</p>
         </div>
-        <div class="service-card">
+        <div class="service-card reveal reveal-delay-2">
           <div class="icon">⚙️</div>
-          <h3>Transmission</h3>
-          <p>Interventions sur cardans, amortisseurs et éléments de train roulant.</p>
+          <h3>Mécanique générale</h3>
+          <p>Cardans, amortisseurs, transmission et interventions sur-mesure.</p>
         </div>
-        <div class="service-card">
-          <div class="icon">✨</div>
-          <h3>Services à la demande</h3>
-          <p>Solutions sur-mesure : dépannage local, conseil montage jantes, préparation trajet.</p>
+        <div class="service-card reveal reveal-delay-3">
+          <div class="icon">🚗</div>
+          <h3>Service express</h3>
+          <p>Crevaison, pression, dépannage local. Sans rendez-vous.</p>
         </div>
       </div>
     </div>
@@ -392,63 +699,55 @@
 
   <section class="dark" id="photos">
     <div class="section-inner">
-      <div class="section-header">
+      <div class="section-header reveal">
         <div>
-          <p class="badge" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12);">Photos du garage</p>
-          <h2>Montrez l'atelier et vos réalisations</h2>
-          <p style="color:#cbd5e1;">Ajoutez vos images (atelier, pneus, géométrie 3D) pour rassurer les visiteurs.</p>
+          <p class="badge" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12);">📸 En images</p>
+          <h2>Notre atelier</h2>
+          <p style="color:#9ca3af;">Un espace équipé pour tous types d'interventions.</p>
         </div>
       </div>
       <div class="gallery">
-        <figure class="photo-card">
-          <img src="https://via.placeholder.com/640x420/111827/ffffff?text=Photo+atelier" alt="Photo de l'atelier">
-          <figcaption>Atelier / ponts élévateurs</figcaption>
+        <figure class="photo-card reveal reveal-delay-1">
+          <img src="assets/porsche.jpg" alt="Véhicule en intervention">
+          <figcaption>Interventions toutes marques</figcaption>
         </figure>
-        <figure class="photo-card">
-          <img src="https://via.placeholder.com/640x420/0b0f16/ffffff?text=Pneus+%26+montage" alt="Photo montage pneus">
-          <figcaption>Pneus neufs ou occasions</figcaption>
+        <figure class="photo-card reveal reveal-delay-2">
+          <img src="assets/garage2.jpg" alt="Stock de pneus">
+          <figcaption>Large choix de pneus</figcaption>
         </figure>
-        <figure class="photo-card">
-          <img src="https://via.placeholder.com/640x420/1f2937/ffffff?text=G%C3%A9om%C3%A9trie+3D" alt="Photo géométrie 3D">
-          <figcaption>Géométrie & parallélisme 3D</figcaption>
+        <figure class="photo-card reveal reveal-delay-3">
+          <img src="assets/garage3.jpg" alt="Équipement géométrie 3D">
+          <figcaption>Géométrie 3D professionnelle</figcaption>
         </figure>
-      </div>
-      <div class="tip-card" style="margin-top: 18px;">
-        <strong>Comment remplacer ces photos par les vôtres ?</strong>
-        <ul style="margin: 0 0 0 18px; padding: 0; display: grid; gap: 6px; color:#cbd5e1;">
-          <li>Déposez vos fichiers (ex: <code>assets/atelier.jpg</code>) dans le dossier du site.</li>
-          <li>Remplacez les URLs ci-dessus par vos chemins locaux, par exemple <code>src="assets/atelier.jpg"</code>.</li>
-          <li>Préférez des images horizontales (1280x720 ou plus) pour un rendu net sur mobile et ordinateur.</li>
-        </ul>
       </div>
     </div>
   </section>
 
-  <section class="dark" id="why">
+  <section id="why">
     <div class="section-inner">
-      <div class="section-header">
+      <div class="section-header reveal">
         <div>
-          <p class="badge" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12);">Pourquoi choisir Stef MecaPneu</p>
-          <h2>Des engagements clairs pour votre voiture</h2>
-          <p style="color:#cbd5e1;">Transparence sur les devis, pièces adaptées à votre véhicule et conseils personnalisés.</p>
+          <p class="badge" style="color:#fff; background: rgba(0,163,255,0.15); border-color: rgba(0,163,255,0.25);">Pourquoi nous ?</p>
+          <h2>Nos engagements</h2>
+          <p>Transparence, qualité et service personnalisé.</p>
         </div>
       </div>
       <div class="why">
-        <div class="why-card">
-          <strong>Devis rapides et détaillés</strong>
-          <span>Explication simple des interventions avant chaque réparation.</span>
+        <div class="why-card reveal reveal-delay-1">
+          <strong>💬 Devis clairs</strong>
+          <span>Explications simples avant chaque intervention. Pas de surprise.</span>
         </div>
-        <div class="why-card">
-          <strong>Pièces garanties</strong>
-          <span>Sélection de pneus et pièces conformes aux recommandations constructeur.</span>
+        <div class="why-card reveal reveal-delay-2">
+          <strong>✅ Pièces garanties</strong>
+          <span>Pneus et pièces conformes aux recommandations constructeur.</span>
         </div>
-        <div class="why-card">
-          <strong>Accueil sans rendez-vous</strong>
-          <span>Urgence crevaison ou contrôle pression ? Passez quand vous voulez.</span>
+        <div class="why-card reveal reveal-delay-3">
+          <strong>🚀 Sans rendez-vous</strong>
+          <span>Urgence ou simple vérification ? Passez quand vous voulez.</span>
         </div>
-        <div class="why-card">
-          <strong>Suivi personnalisé</strong>
-          <span>Historique d'entretien conservé pour planifier vos prochaines révisions.</span>
+        <div class="why-card reveal reveal-delay-4">
+          <strong>📋 Suivi personnalisé</strong>
+          <span>Historique conservé pour planifier vos prochaines révisions.</span>
         </div>
       </div>
     </div>
@@ -456,71 +755,69 @@
 
   <section class="dark" id="avis">
     <div class="section-inner">
-      <div class="section-header">
+      <div class="section-header reveal">
         <div>
-          <p class="badge" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12);">Avis clients 5★</p>
-          <h2>La satisfaction des automobilistes</h2>
-          <p style="color:#cbd5e1;">Extraits d'avis Google : efficacité, transparence et accueil chaleureux.</p>
+          <p class="badge" style="background: rgba(251,191,36,0.15); border-color: rgba(251,191,36,0.25); color: #fbbf24;">⭐ Avis clients</p>
+          <h2>Ce qu'ils disent de nous</h2>
+          <p style="color:#9ca3af;">Nos clients témoignent sur Google.</p>
         </div>
-        <a class="btn-primary" href="https://www.google.com/maps/place/Stef+MecaPneu" target="_blank" rel="noopener">Voir tous les avis</a>
+        <a class="btn-primary" href="https://www.google.com/search?sca_esv=c302aaa6c87d965b&si=AMgyJEtREmoPL4P1I5IDCfuA8gybfVI2d5Uj7QMwYCZHKDZ-E5ecVeBOqdorDDjPvRqbx6ih3V-_AzdHQZ9dmdfHbLSaj2KIF9sb2LDGLAOHkBdFoHinri5DDiX3uUf8FO4kiZ7z606c&q=STEF+MECAPNEU+Avis&sa=X&ved=2ahUKEwiNvpXuq52RAxXgU6QEHWnvPJMQ0bkNegQIIxAE&biw=1834&bih=900&dpr=1" target="_blank" rel="noopener">Voir tous les avis</a>
       </div>
       <div class="cards">
-        <div class="review-card">
+        <div class="review-card reveal reveal-delay-1">
           <div class="stars">★★★★★</div>
           <div class="reviewer">Sonia R.</div>
-          <p>Super garage ! Venu pour une crevaison : accueil rapide, ils ont réparé immédiatement et vérifié la pression des pneus. Professionnels et très aimables.</p>
+          <p style="color:#9ca3af; margin:0; line-height:1.6;">Super garage ! Accueil rapide pour une crevaison, réparation immédiate. Très professionnels.</p>
         </div>
-        <div class="review-card">
+        <div class="review-card reveal reveal-delay-2">
           <div class="stars">★★★★★</div>
           <div class="reviewer">Philippe B.</div>
-          <p>Des pros, efficaces et honnêtes. Changement de pneus et parallélisme fait dans la foulée, prix raisonnable. Je recommande vivement.</p>
+          <p style="color:#9ca3af; margin:0; line-height:1.6;">Efficaces et honnêtes. Pneus et parallélisme faits dans la foulée, prix raisonnable.</p>
         </div>
-        <div class="review-card">
+        <div class="review-card reveal reveal-delay-3">
           <div class="stars">★★★★★</div>
           <div class="reviewer">Mickaël L.</div>
-          <p>Une équipe au top : diagnostics clairs, explications simples, respect des délais. J'y vais maintenant pour toutes mes révisions.</p>
+          <p style="color:#9ca3af; margin:0; line-height:1.6;">Équipe au top : diagnostics clairs, explications simples. J'y vais pour toutes mes révisions.</p>
         </div>
-        <div class="review-card">
+        <div class="review-card reveal reveal-delay-4">
           <div class="stars">★★★★★</div>
           <div class="reviewer">Laetitia D.</div>
-          <p>Travail sérieux, transparent et avec le sourire. J'ai pu passer sans rendez-vous, géométrie 3D réalisée en moins d'une heure.</p>
+          <p style="color:#9ca3af; margin:0; line-height:1.6;">Travail sérieux et transparent. Géométrie 3D réalisée en moins d'une heure sans rendez-vous.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="infos">
+  <section id="infos" class="dark">
     <div class="section-inner">
         <div class="grid-2">
-          <div>
-            <p class="badge" style="color:#0b0c10; background: rgba(0,163,255,0.2); border-color: rgba(0,163,255,0.3);">Infos pratiques</p>
-            <h2>Prêt à vous accueillir avec ou sans rendez-vous</h2>
-            <div class="info-box">
-              <div class="info-row"><strong>Adresse :</strong> RN 568 - Croix Saint, 13500 Martigues</div>
-              <div class="info-row"><strong>Horaires :</strong> 09h30 - 18h00</div>
-              <div class="info-row"><strong>Jours :</strong> Du Lundi au Samedi</div>
-              <div class="info-row"><strong>Rendez-vous :</strong> Avec ou sans rendez-vous</div>
-              <div class="info-row" style="gap: 12px; flex-wrap: wrap;">
-                <a class="btn-primary" href="tel:0442879437">Appeler le fixe</a>
-                <a class="btn-secondary" href="tel:0649781134">Appeler le mobile</a>
-                <a class="btn-secondary" href="mailto:stefmecapneu@gmail.com">Écrire un email</a>
+          <div class="reveal">
+            <p class="badge" style="background: rgba(0,163,255,0.15); border-color: rgba(0,163,255,0.25); color:#93c5fd;">📍 Accès & horaires</p>
+            <h2>Venez nous voir</h2>
+            <div class="info-box" style="margin-top: 20px;">
+              <div class="info-row" style="gap:12px;"><span style="font-size:20px;">📍</span><div><strong style="color:#fff;">RN 568 - Croix Saint</strong><br><span style="color:#9ca3af;">13500 Martigues</span></div></div>
+              <div class="info-row" style="gap:12px;"><span style="font-size:20px;">🕐</span><div><strong style="color:#fff;">09h30 - 18h00</strong><br><span style="color:#9ca3af;">Lundi au Samedi</span></div></div>
+              <div class="info-row" style="gap:12px;"><span style="font-size:20px;">✅</span><div><strong style="color:#22c55e;">Avec ou sans rendez-vous</strong></div></div>
+              <div class="info-row" style="gap: 12px; flex-wrap: wrap; margin-top: 8px;">
+                <a class="btn-primary" href="tel:0442879437">📞 Appeler</a>
+                <a class="btn-secondary" href="https://www.google.com/maps/dir/?api=1&destination=RN+568+-+Croix+Saint+13500+Martigues" target="_blank" rel="noopener">🗺️ Itinéraire</a>
               </div>
             </div>
           </div>
-          <div class="map-wrapper">
-            <iframe title="Localisation Stef MecaPneu" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1169.0428333416784!2d5.011800799999999!3d43.4112149!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12b61f365e387903%3A0x38434f9e60c949a3!2sFrance%20lavage%20Lustrage%20R%C3%A9novation%20Phare%20Detailling!5e0!3m2!1sfr!2sfr!4v0000000000000!5m2!1sfr!2sfr" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <div class="map-wrapper reveal reveal-delay-2">
+            <iframe title="Localisation Stef MecaPneu" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2898.2824879380446!2d5.013772699999999!3d43.4129243!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12b61fc3d9aaf39b%3A0x9725a2632dfefbe9!2sSTEF%20MECAPNEU!5e0!3m2!1sfr!2sfr!4v1764623461304!5m2!1sfr!2sfr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
           </div>
         </div>
     </div>
   </section>
 
-  <section class="dark" id="contact">
+  <section id="contact">
     <div class="section-inner">
       <div class="grid-2">
-        <div>
-          <p class="badge" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12);">Contact express</p>
-          <h2>Besoin d'un devis ou d'un créneau rapide ?</h2>
-          <p style="color:#cbd5e1;">Laissez-nous vos coordonnées et le type d'intervention souhaitée. Nous vous rappelons rapidement.</p>
+        <div class="reveal">
+          <p class="badge" style="color:#fff; background: rgba(255,138,0,0.15); border-color: rgba(255,138,0,0.25);">✉️ Contact</p>
+          <h2>Demandez un devis</h2>
+          <p style="color:#9ca3af; margin-bottom: 20px;">Décrivez votre besoin, nous vous répondons rapidement.</p>
           <div class="cta-panel">
             <label style="display:grid; gap:6px;">
               <span class="info-label">Nom</span>
@@ -534,31 +831,29 @@
               <span class="info-label">Service souhaité</span>
               <select id="service">
                 <option>Pneus</option>
-                <option>Diagnostic / pré-contrôle</option>
                 <option>Géométrie 3D</option>
+                <option>Diagnostic / pré-contrôle</option>
                 <option>Révision / entretien</option>
-                <option>Transmission</option>
                 <option>Autre demande</option>
               </select>
             </label>
             <label style="display:grid; gap:6px;">
               <span class="info-label">Message</span>
-              <textarea id="message" rows="3" placeholder="Précisez votre véhicule et vos disponibilités"></textarea>
+              <textarea id="message" rows="3" placeholder="Véhicule, disponibilités..."></textarea>
             </label>
-            <button class="btn-primary" id="submit">Envoyer ma demande</button>
-            <div id="form-feedback" style="display:none; color:#22c55e; font-weight:700;">Merci ! Nous vous rappelons très vite.</div>
-            <div id="form-error" style="display:none; color:#f97316; font-weight:700;">Merci de renseigner au moins votre nom et votre téléphone.</div>
+            <button class="btn-primary" id="submit" style="margin-top:8px;">Envoyer ma demande</button>
+            <div id="form-feedback" style="display:none; color:#22c55e; font-weight:700; text-align:center;">✓ Merci ! Nous vous rappelons très vite.</div>
+            <div id="form-error" style="display:none; color:#f97316; font-weight:700; text-align:center;">Merci de renseigner votre nom et téléphone.</div>
           </div>
         </div>
-        <div>
-          <div class="info-box">
-            <div class="info-row"><strong>Fixe :</strong> 04 42 87 94 37</div>
-            <div class="info-row"><strong>Mobile :</strong> 06 49 78 11 34</div>
-            <div class="info-row"><strong>Email :</strong> stefmecapneu@gmail.com</div>
-            <div class="info-row"><strong>Site web :</strong> www.stefmecapneu.fr</div>
-            <div class="info-row"><strong>Adresse :</strong> RN 568 - Croix Saint, 13500 Martigues</div>
-            <div class="info-row"><strong>Horaires :</strong> 09h30 - 18h00, Lundi - Samedi</div>
-            <a class="btn-secondary" href="https://www.google.com/maps/dir/?api=1&destination=RN+568+-+Croix+Saint+13500+Martigues" target="_blank" rel="noopener">Itinéraire Google Maps</a>
+        <div class="reveal reveal-delay-2">
+          <div class="info-box" style="height: 100%;">
+            <h3 style="margin:0 0 16px 0; color:#fff; font-size: 18px;">Coordonnées directes</h3>
+            <div class="info-row" style="gap:12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.08);"><span style="font-size:18px;">📞</span><div><span style="color:#9ca3af; font-size:12px;">Téléphone</span><br><strong style="color:#fff;">04 42 87 94 37</strong></div></div>
+            <div class="info-row" style="gap:12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.08);"><span style="font-size:18px;">📱</span><div><span style="color:#9ca3af; font-size:12px;">Mobile / WhatsApp</span><br><strong style="color:#fff;">06 49 78 11 34</strong></div></div>
+            <div class="info-row" style="gap:12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.08);"><span style="font-size:18px;">📧</span><div><span style="color:#9ca3af; font-size:12px;">Email</span><br><strong style="color:#fff;">stefmecapneu@gmail.com</strong></div></div>
+            <div class="info-row" style="gap:12px; padding: 12px 0;"><span style="font-size:18px;">🌐</span><div><span style="color:#9ca3af; font-size:12px;">Site web</span><br><strong style="color:#fff;">www.stefmecapneu.fr</strong></div></div>
+            <a class="btn-secondary" href="https://wa.me/33649781134" style="margin-top: 16px; width:100%; justify-content:center;">💬 Contacter sur WhatsApp</a>
           </div>
         </div>
       </div>
@@ -567,32 +862,31 @@
 
   <section class="dark" aria-labelledby="faq-title">
     <div class="section-inner">
-      <div class="section-header">
+      <div class="section-header reveal">
         <div>
-          <p class="badge" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12);">Questions fréquentes</p>
-          <h2 id="faq-title">Vos questions, nos réponses</h2>
-          <p style="color:#cbd5e1;">Les informations essentielles avant de passer à l'atelier.</p>
+          <p class="badge" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12);">❓ FAQ</p>
+          <h2 id="faq-title">Questions fréquentes</h2>
         </div>
       </div>
       <div class="faq">
-        <details class="faq-item" open>
+        <details class="faq-item reveal reveal-delay-1" open>
           <summary>Puis-je venir sans rendez-vous ?</summary>
-          <p>Oui, le garage accueille sans rendez-vous pour les urgences pneus, crevaisons et contrôles pression. Pour une révision complète, un appel avant votre venue permet de préparer les pièces.</p>
+          <p>Oui ! Crevaisons, contrôles pression et urgences pneus sont traités immédiatement. Pour une révision complète, un appel permet de préparer les pièces.</p>
         </details>
-        <details class="faq-item">
-          <summary>Quels moyens de paiement sont acceptés ?</summary>
-          <p>Cartes bancaires, espèces et virement pour les professionnels. Le détail figure sur le devis transmis avant intervention.</p>
+        <details class="faq-item reveal reveal-delay-2">
+          <summary>Quels moyens de paiement acceptez-vous ?</summary>
+          <p>Cartes bancaires, espèces et virement pour les professionnels.</p>
         </details>
-        <details class="faq-item">
+        <details class="faq-item reveal reveal-delay-3">
           <summary>Combien de temps pour une géométrie 3D ?</summary>
-          <p>Comptez environ 45 minutes à 1 heure selon le véhicule et l'état des trains roulants. Nous vérifions aussi l'usure des pneus et la pression avant restitution.</p>
+          <p>Environ 45 minutes à 1 heure. Nous vérifions aussi l'usure des pneus et la pression avant restitution.</p>
         </details>
       </div>
     </div>
   </section>
 
   <footer>
-    <div>Stef MecaPneu - RN 568 - Croix Saint, 13500 Martigues</div>
+    <div>Stef MecaPneu · Garage automobile à Martigues</div>
     <div>© <span id="year"></span> Tous droits réservés</div>
   </footer>
 
@@ -602,6 +896,23 @@
   </div>
 
   <script>
+    // Intersection Observer for scroll animations
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+    
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
@@ -613,30 +924,45 @@
       });
     });
 
-    // Simple fake form submission feedback
+    // Form submission with animation
     const submitBtn = document.getElementById('submit');
     const feedback = document.getElementById('form-feedback');
     const error = document.getElementById('form-error');
+    
     submitBtn.addEventListener('click', () => {
       const name = document.getElementById('name').value.trim();
       const phone = document.getElementById('phone').value.trim();
       if (!name || !phone) {
         feedback.style.display = 'none';
         error.style.display = 'block';
+        error.style.animation = 'fadeIn 0.3s ease';
         return;
       }
       error.style.display = 'none';
       submitBtn.textContent = 'Envoi en cours...';
       submitBtn.disabled = true;
+      submitBtn.style.opacity = '0.7';
+      
       setTimeout(() => {
         feedback.style.display = 'block';
+        feedback.style.animation = 'fadeInUp 0.5s ease';
         submitBtn.textContent = 'Envoyer ma demande';
         submitBtn.disabled = false;
-      }, 800);
+        submitBtn.style.opacity = '1';
+      }, 1000);
     });
 
     // Update footer year
     document.getElementById('year').textContent = new Date().getFullYear();
+    
+    // Add parallax effect to hero logo
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const hero = document.querySelector('.hero');
+      if (hero && scrolled < window.innerHeight) {
+        hero.style.setProperty('--scroll', scrolled * 0.3 + 'px');
+      }
+    });
   </script>
 </body>
 </html>
