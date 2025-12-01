@@ -17,18 +17,21 @@
   <style>
     :root {
       --orange: #ff8a00;
-      --blue: #0091ff;
-      --dark: #0b0c10;
-      --light: #f5f7fb;
-      --text: #1f2833;
-      --muted: #6b7280;
+      --blue: #00a3ff;
+      --dark: #040507;
+      --dark-2: #0b0f16;
+      --light: #0f172a;
+      --text: #e5ecf5;
+      --muted: #9fb3c8;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
       color: var(--text);
-      background: linear-gradient(135deg, #0b0c10 0%, #111827 40%, #0b0c10 100%);
+      background: radial-gradient(circle at 15% 20%, rgba(255,138,0,0.08), transparent 25%),
+                  radial-gradient(circle at 85% 10%, rgba(0,163,255,0.08), transparent 25%),
+                  linear-gradient(135deg, #05070b 0%, #0b0f16 45%, #05070b 100%);
       background-attachment: fixed;
     }
     a { color: inherit; text-decoration: none; }
@@ -37,7 +40,7 @@
       top: 0;
       z-index: 10;
       backdrop-filter: blur(10px);
-      background: rgba(11,12,16,0.85);
+      background: rgba(4,5,7,0.92);
       border-bottom: 1px solid rgba(255,255,255,0.05);
     }
     .topbar {
@@ -48,7 +51,7 @@
       padding: 8px 24px;
       font-size: 14px;
       color: #e5e7eb;
-      background: linear-gradient(90deg, rgba(255,138,0,0.12), rgba(0,145,255,0.08));
+      background: linear-gradient(90deg, rgba(255,138,0,0.25), rgba(0,163,255,0.18));
       border-bottom: 1px solid rgba(255,255,255,0.06);
     }
     nav {
@@ -82,7 +85,7 @@
       justify-content: center;
       gap: 8px;
       padding: 12px 20px;
-      background: linear-gradient(135deg, var(--orange), #ffb347);
+      background: linear-gradient(135deg, var(--orange), #ffc46b);
       color: #0b0c10;
       border-radius: 10px;
       font-weight: 700;
@@ -147,8 +150,8 @@
     .highlight-item { display: flex; align-items: center; gap: 10px; color: #e5e7eb; font-weight: 500; }
     .highlight-icon { width: 34px; height: 34px; border-radius: 10px; background: rgba(255,255,255,0.08); display: grid; place-items: center; color: var(--orange); }
     .hero-card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: linear-gradient(145deg, rgba(0,163,255,0.08), rgba(255,138,0,0.06));
+      border: 1px solid rgba(255,255,255,0.12);
       border-radius: 18px;
       padding: 22px;
       backdrop-filter: blur(8px);
@@ -161,7 +164,7 @@
       align-items: center;
       gap: 8px;
       padding: 8px 12px;
-      background: rgba(0,145,255,0.15);
+      background: rgba(0,163,255,0.16);
       border-radius: 999px;
       color: #e0f2fe;
       font-weight: 600;
@@ -169,34 +172,34 @@
       margin-right: 8px;
       margin-bottom: 8px;
     }
-    section { padding: 70px 24px; background: var(--light); }
-    section.dark { background: #0f172a; color: #e5e7eb; }
+    section { padding: 70px 24px; background: var(--light); color: var(--text); }
+    section.dark { background: var(--dark-2); color: var(--text); }
     .section-inner { max-width: 1200px; margin: 0 auto; }
     .section-header { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
     .section-header h2 { margin: 0; font-size: clamp(28px, 4vw, 36px); }
     .section-header p { margin: 8px 0 0; color: var(--muted); }
     .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; margin-top: 24px; }
     .service-card {
-      background: #fff;
+      background: #0b111b;
       padding: 18px;
       border-radius: 14px;
-      border: 1px solid #e5e7eb;
-      box-shadow: 0 10px 30px rgba(15,23,42,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
       display: grid;
       gap: 8px;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    .service-card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(15,23,42,0.08); }
+    .service-card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(0,0,0,0.35); }
     .service-card .icon {
       width: 44px; height: 44px; border-radius: 12px;
-      background: linear-gradient(135deg, rgba(255,138,0,0.15), rgba(0,145,255,0.15));
-      display: grid; place-items: center; color: #0b0c10; font-weight: 700;
+      background: linear-gradient(135deg, rgba(255,138,0,0.2), rgba(0,163,255,0.2));
+      display: grid; place-items: center; color: #fff; font-weight: 700;
     }
-    .service-card h3 { margin: 0; color: var(--text); }
+    .service-card h3 { margin: 0; color: #f8fafc; }
     .service-card p { margin: 0; color: var(--muted); font-size: 14px; }
     .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; align-items: center; margin-top: 30px; }
     .info-box {
-      background: #0b0c10;
+      background: #0b0f16;
       color: #fff;
       padding: 20px;
       border-radius: 16px;
@@ -208,11 +211,11 @@
     .info-label { color: #9ca3af; font-size: 13px; }
     .map-wrapper iframe { width: 100%; height: 320px; border: none; border-radius: 16px; box-shadow: 0 16px 40px rgba(15,23,42,0.12); }
     .review-card {
-      background: #fff;
-      border: 1px solid #e5e7eb;
+      background: #0b111b;
+      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 14px;
       padding: 18px;
-      box-shadow: 0 10px 30px rgba(15,23,42,0.05);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
       display: grid;
       gap: 10px;
     }
@@ -229,15 +232,30 @@
       box-shadow: 0 20px 60px rgba(0,0,0,0.35);
     }
     .why { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 22px; }
-    .why-card { background: #fff; padding: 18px; border-radius: 12px; border: 1px solid #e5e7eb; display: grid; gap: 6px; box-shadow: 0 10px 30px rgba(15,23,42,0.05); }
-    .why-card strong { color: var(--text); }
+    .why-card { background: #0b111b; padding: 18px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); display: grid; gap: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
+    .why-card strong { color: #f8fafc; }
     .faq { margin-top: 24px; display: grid; gap: 12px; }
-    .faq-item { background: #0b0c10; color: #e5e7eb; padding: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); }
+    .faq-item { background: #0b111b; color: #e5e7eb; padding: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); }
     .faq-item summary { font-weight: 700; cursor: pointer; }
     .faq-item p { color: #cbd5e1; margin: 8px 0 0; }
+    .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 22px; }
+    .photo-card { background: #0b111b; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.25); }
+    .photo-card img { width: 100%; height: 180px; object-fit: cover; display: block; }
+    .photo-card figcaption { padding: 12px; color: #e5e7eb; font-weight: 600; }
+    .tip-card { background: #0b111b; border: 1px dashed rgba(255,255,255,0.2); border-radius: 12px; padding: 16px; color: #cbd5e1; display: grid; gap: 8px; }
+    .tip-card strong { color: #f8fafc; }
     .floating-cta { position: fixed; right: 16px; bottom: 16px; display: flex; flex-direction: column; gap: 10px; z-index: 11; }
     .floating-cta a { box-shadow: 0 12px 30px rgba(0,0,0,0.22); }
-    footer { background: #0b0c10; color: #9ca3af; padding: 24px; text-align: center; border-top: 1px solid rgba(255,255,255,0.06); }
+    footer { background: #040507; color: #9ca3af; padding: 24px; text-align: center; border-top: 1px solid rgba(255,255,255,0.06); }
+    input, select, textarea {
+      background: #0b111b;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      padding: 10px 12px;
+      color: #e5e7eb;
+      font-family: inherit;
+    }
+    input:focus, select:focus, textarea:focus { outline: 2px solid rgba(0,163,255,0.45); }
     @media (max-width: 768px) {
       nav { padding: 12px 18px; }
       .nav-links { display: none; }
@@ -292,7 +310,7 @@
         <div class="card-title">Services rapides et sur-mesure</div>
         <div class="card-desc">Diagnostic, géométrie 3D, pneus toutes marques et révision complète pour rouler en toute sécurité.</div>
         <div class="grid-2" style="margin-top: 12px; gap: 12px;">
-          <div class="info-box" style="background:#0f172a;">
+          <div class="info-box">
             <div class="info-label">Téléphone</div>
             <div class="info-row" style="justify-content: space-between;">
               <div><strong>Fixe:</strong> 04 42 87 94 37</div>
@@ -305,7 +323,7 @@
             <div class="info-label">Email</div>
             <a href="mailto:stefmecapneu@gmail.com" style="color:#e5e7eb; font-weight:600;">stefmecapneu@gmail.com</a>
           </div>
-          <div class="info-box" style="background:#0b0c10; gap: 8px;">
+          <div class="info-box" style="gap: 8px;">
             <div class="info-row" style="justify-content: space-between;">
               <div>
                 <div class="info-label">Ouverture</div>
@@ -368,6 +386,40 @@
           <h3>Services à la demande</h3>
           <p>Solutions sur-mesure : dépannage local, conseil montage jantes, préparation trajet.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dark" id="photos">
+    <div class="section-inner">
+      <div class="section-header">
+        <div>
+          <p class="badge" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12);">Photos du garage</p>
+          <h2>Montrez l'atelier et vos réalisations</h2>
+          <p style="color:#cbd5e1;">Ajoutez vos images (atelier, pneus, géométrie 3D) pour rassurer les visiteurs.</p>
+        </div>
+      </div>
+      <div class="gallery">
+        <figure class="photo-card">
+          <img src="https://via.placeholder.com/640x420/111827/ffffff?text=Photo+atelier" alt="Photo de l'atelier">
+          <figcaption>Atelier / ponts élévateurs</figcaption>
+        </figure>
+        <figure class="photo-card">
+          <img src="https://via.placeholder.com/640x420/0b0f16/ffffff?text=Pneus+%26+montage" alt="Photo montage pneus">
+          <figcaption>Pneus neufs ou occasions</figcaption>
+        </figure>
+        <figure class="photo-card">
+          <img src="https://via.placeholder.com/640x420/1f2937/ffffff?text=G%C3%A9om%C3%A9trie+3D" alt="Photo géométrie 3D">
+          <figcaption>Géométrie & parallélisme 3D</figcaption>
+        </figure>
+      </div>
+      <div class="tip-card" style="margin-top: 18px;">
+        <strong>Comment remplacer ces photos par les vôtres ?</strong>
+        <ul style="margin: 0 0 0 18px; padding: 0; display: grid; gap: 6px; color:#cbd5e1;">
+          <li>Déposez vos fichiers (ex: <code>assets/atelier.jpg</code>) dans le dossier du site.</li>
+          <li>Remplacez les URLs ci-dessus par vos chemins locaux, par exemple <code>src="assets/atelier.jpg"</code>.</li>
+          <li>Préférez des images horizontales (1280x720 ou plus) pour un rendu net sur mobile et ordinateur.</li>
+        </ul>
       </div>
     </div>
   </section>
@@ -439,26 +491,26 @@
 
   <section id="infos">
     <div class="section-inner">
-      <div class="grid-2">
-        <div>
-          <p class="badge" style="color:#0b0c10; background: rgba(0,145,255,0.15); border-color: rgba(0,145,255,0.25);">Infos pratiques</p>
-          <h2>Prêt à vous accueillir avec ou sans rendez-vous</h2>
-          <div class="info-box" style="background:#fff; color: var(--text); border:1px solid #e5e7eb; box-shadow:0 12px 30px rgba(15,23,42,0.06);">
-            <div class="info-row"><strong>Adresse :</strong> RN 568 - Croix Saint, 13500 Martigues</div>
-            <div class="info-row"><strong>Horaires :</strong> 09h30 - 18h00</div>
-            <div class="info-row"><strong>Jours :</strong> Du Lundi au Samedi</div>
-            <div class="info-row"><strong>Rendez-vous :</strong> Avec ou sans rendez-vous</div>
-            <div class="info-row" style="gap: 12px; flex-wrap: wrap;">
-              <a class="btn-primary" href="tel:0442879437">Appeler le fixe</a>
-              <a class="btn-secondary" href="tel:0649781134">Appeler le mobile</a>
-              <a class="btn-secondary" href="mailto:stefmecapneu@gmail.com">Écrire un email</a>
+        <div class="grid-2">
+          <div>
+            <p class="badge" style="color:#0b0c10; background: rgba(0,163,255,0.2); border-color: rgba(0,163,255,0.3);">Infos pratiques</p>
+            <h2>Prêt à vous accueillir avec ou sans rendez-vous</h2>
+            <div class="info-box">
+              <div class="info-row"><strong>Adresse :</strong> RN 568 - Croix Saint, 13500 Martigues</div>
+              <div class="info-row"><strong>Horaires :</strong> 09h30 - 18h00</div>
+              <div class="info-row"><strong>Jours :</strong> Du Lundi au Samedi</div>
+              <div class="info-row"><strong>Rendez-vous :</strong> Avec ou sans rendez-vous</div>
+              <div class="info-row" style="gap: 12px; flex-wrap: wrap;">
+                <a class="btn-primary" href="tel:0442879437">Appeler le fixe</a>
+                <a class="btn-secondary" href="tel:0649781134">Appeler le mobile</a>
+                <a class="btn-secondary" href="mailto:stefmecapneu@gmail.com">Écrire un email</a>
+              </div>
             </div>
           </div>
+          <div class="map-wrapper">
+            <iframe title="Localisation Stef MecaPneu" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1169.0428333416784!2d5.011800799999999!3d43.4112149!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12b61f365e387903%3A0x38434f9e60c949a3!2sFrance%20lavage%20Lustrage%20R%C3%A9novation%20Phare%20Detailling!5e0!3m2!1sfr!2sfr!4v0000000000000!5m2!1sfr!2sfr" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
         </div>
-        <div class="map-wrapper">
-          <iframe title="Localisation Stef MecaPneu" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1441.607812228958!2d5.0565114!3d43.4044174!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12c9fdd8736ae935%3A0x971fb19cd26d8e29!2sStef%20MecaPneu!5e0!3m2!1sfr!2sfr!4v1700000000000!5m2!1sfr!2sfr" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-      </div>
     </div>
   </section>
 
