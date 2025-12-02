@@ -221,9 +221,9 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 700px;
-      height: 700px;
-      background: url('assets/logo.jpg') center center no-repeat;
+      width: 1000px;
+      height: 1000px;
+      background: url('assets/logo.png') center center no-repeat;
       background-size: contain;
       opacity: 0.08;
       filter: grayscale(30%);
@@ -712,7 +712,7 @@
           <figcaption>Interventions toutes marques</figcaption>
         </figure>
         <figure class="photo-card reveal reveal-delay-2">
-          <img src="assets/garage2.jpg" alt="Stock de pneus">
+          <img src="assets/pneus.webp" alt="Stock de pneus">
           <figcaption>Large choix de pneus</figcaption>
         </figure>
         <figure class="photo-card reveal reveal-delay-3">
@@ -818,18 +818,24 @@
           <p class="badge" style="color:#fff; background: rgba(255,138,0,0.15); border-color: rgba(255,138,0,0.25);">✉️ Contact</p>
           <h2>Demandez un devis</h2>
           <p style="color:#9ca3af; margin-bottom: 20px;">Décrivez votre besoin, nous vous répondons rapidement.</p>
-          <div class="cta-panel">
+          <form action="https://formsubmit.co/stefmecapneu@gmail.com" method="POST" class="cta-panel">
+            <!-- Configuration FormSubmit -->
+            <input type="hidden" name="_subject" value="Nouvelle demande de devis - Stef MecaPneu">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_template" value="box">
+            <input type="hidden" name="_next" value="https://www.stefmecapneu.fr/#contact">
+            
             <label style="display:grid; gap:6px;">
               <span class="info-label">Nom</span>
-              <input type="text" id="name" placeholder="Votre nom" required>
+              <input type="text" name="Nom" placeholder="Votre nom" required>
             </label>
             <label style="display:grid; gap:6px;">
               <span class="info-label">Téléphone</span>
-              <input type="tel" id="phone" placeholder="06 00 00 00 00" required>
+              <input type="tel" name="Téléphone" placeholder="06 00 00 00 00" required>
             </label>
             <label style="display:grid; gap:6px;">
               <span class="info-label">Service souhaité</span>
-              <select id="service">
+              <select name="Service" required>
                 <option>Pneus</option>
                 <option>Géométrie 3D</option>
                 <option>Diagnostic / pré-contrôle</option>
@@ -839,12 +845,10 @@
             </label>
             <label style="display:grid; gap:6px;">
               <span class="info-label">Message</span>
-              <textarea id="message" rows="3" placeholder="Véhicule, disponibilités..."></textarea>
+              <textarea name="Message" rows="3" placeholder="Véhicule, disponibilités..."></textarea>
             </label>
-            <button class="btn-primary" id="submit" style="margin-top:8px;">Envoyer ma demande</button>
-            <div id="form-feedback" style="display:none; color:#22c55e; font-weight:700; text-align:center;">✓ Merci ! Nous vous rappelons très vite.</div>
-            <div id="form-error" style="display:none; color:#f97316; font-weight:700; text-align:center;">Merci de renseigner votre nom et téléphone.</div>
-          </div>
+            <button type="submit" class="btn-primary" style="margin-top:8px;">Envoyer ma demande</button>
+          </form>
         </div>
         <div class="reveal reveal-delay-2">
           <div class="info-box" style="height: 100%;">
@@ -922,34 +926,6 @@
           target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       });
-    });
-
-    // Form submission with animation
-    const submitBtn = document.getElementById('submit');
-    const feedback = document.getElementById('form-feedback');
-    const error = document.getElementById('form-error');
-    
-    submitBtn.addEventListener('click', () => {
-      const name = document.getElementById('name').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      if (!name || !phone) {
-        feedback.style.display = 'none';
-        error.style.display = 'block';
-        error.style.animation = 'fadeIn 0.3s ease';
-        return;
-      }
-      error.style.display = 'none';
-      submitBtn.textContent = 'Envoi en cours...';
-      submitBtn.disabled = true;
-      submitBtn.style.opacity = '0.7';
-      
-      setTimeout(() => {
-        feedback.style.display = 'block';
-        feedback.style.animation = 'fadeInUp 0.5s ease';
-        submitBtn.textContent = 'Envoyer ma demande';
-        submitBtn.disabled = false;
-        submitBtn.style.opacity = '1';
-      }, 1000);
     });
 
     // Update footer year
