@@ -583,7 +583,18 @@
       .cta-row { width: 100%; }
       .btn-secondary { width: 100%; justify-content: center; }
       .btn-primary { width: 100%; }
-      .footer-buttons { flex-direction: column; gap: 8px; }
+      footer { padding: 10px 16px; }
+      footer div:first-child { display: none; }
+      footer > div:last-child { display: none; }
+      .footer-buttons { flex-direction: row; gap: 8px; margin: 0; }
+      .footer-buttons .btn-primary,
+      .footer-buttons .btn-secondary { 
+        padding: 10px 14px; 
+        font-size: 13px;
+        width: auto;
+        flex: 1;
+      }
+      body { padding-bottom: 60px; }
     }
   </style>
 </head>
