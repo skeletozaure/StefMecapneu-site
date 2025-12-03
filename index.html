@@ -567,6 +567,8 @@
       font-family: inherit;
       font-size: 15px;
       transition: all 0.3s ease;
+      width: 100%;
+      max-width: 100%;
     }
     input:focus, select:focus, textarea:focus { 
       outline: none;
@@ -595,9 +597,12 @@
         flex: 1;
       }
       body { padding-bottom: 60px; }
-      .cta-panel { padding: 20px 16px; }
+      .cta-panel { padding: 20px 16px; max-width: 100%; }
       .grid-2 { gap: 16px; }
       section { padding: 60px 16px; }
+      .section-inner { max-width: 100%; overflow: hidden; }
+      input, select, textarea { width: 100%; max-width: 100%; }
+      .cta-panel .btn-primary { max-width: 100%; }
     }
   </style>
 </head>
